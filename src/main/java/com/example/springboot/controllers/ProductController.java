@@ -39,8 +39,8 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") UUID id){
         Optional<ProductModel> product0 = productRepository.findById(id);
-        if (product0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
+        if (product0.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{'error': 'Produto não encontrado'}");
         }
         return ResponseEntity.status(HttpStatus.OK).body(product0.get());
 
