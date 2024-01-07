@@ -20,6 +20,9 @@ import com.example.springboot.dtos.ProductRecordDTO;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,9 +39,16 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProductModel>> getAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(productRepository.findAll());
-    }
+    public ResponseEntity<List<ProductModel>> getAllProducts(){
+		List<ProductModel> productsList = productRepository.findAll();
+		if(!productsList.isEmpty()) {
+			for(ProductModel product : productsList) {
+				UUID id = product.getIdProduct();
+				product.add(linkTo(methodOn(ProductController.class).getOne(id)).withSelfRel());
+			}
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(productsList);
+	}
 
     @GetMapping("/products/{id}")
     public ResponseEntity<Object> getOne(@PathVariable(value = "id") UUID id){
