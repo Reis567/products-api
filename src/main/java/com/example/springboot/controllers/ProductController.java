@@ -58,7 +58,7 @@ public class ProductController {
         }
         var productModel = existingProduct.get();
         BeanUtils.copyProperties(productRecordDTO, productModel);
-        return ResponseEntity.status(HttpStatus.OK).body(productRepository.save(productModel))
+        return ResponseEntity.status(HttpStatus.OK).body(productRepository.save(productModel));
     }
 
     @DeleteMapping("/products/{id}")
